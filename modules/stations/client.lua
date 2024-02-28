@@ -52,4 +52,5 @@ end
 --- @class RawRoom
 --- @field id number;
 --- @field price number;
---- @field note? string;
+--- @field note string?;
+--- @field stash {coords: vector3, slots: number, maxWeight: number}?;

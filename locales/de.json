@@ -3,5 +3,6 @@
     "motel_rental_menu_title": "%s - Freie Zimmer",
     "motel_rental_menu_room_title": "Room %s",
     "motel_rental_menu_room_title_note": "%s (%s)",
-    "motel_rental_menu_room_description": "Price: %s$ per night"
+    "motel_rental_menu_room_description": "Price: %s$ per night",
+    "motel_stash_label": "Motel Stash for Room %s"
 }

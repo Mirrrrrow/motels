@@ -3,6 +3,10 @@ Shared = {
     framework = GetConvar('mdevelopment:framework', 'esx')
 }
 
+function Shared.getStashIdentifier(motelId, roomId)
+    return 'motels-' .. motelId .. '-rooms-' .. roomId
+end
+
 if IsDuplicityVersion() then
     Server = {}
 else

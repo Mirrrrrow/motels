@@ -23,13 +23,15 @@ local function formatMenuOptions(motelId)
     if not rooms[motelId] or #rooms[motelId] == 0 then return {} end
 
     local options, num = {}, 0
+    local availableRooms = lib.callback.await('motels:server:isRoomAvailable', false, motelId)
+
     for _, room in pairs(rooms[motelId]) do
         num = num + 1
         options[num] = {
-            icon = 'fas fa-door-open',
+            icon = availableRooms[room.id] and 'fas fa-door-open' or 'fas fa-door-closed',
             title = room.menuLabel,
             description = room.menuDescription,
-            disabled = false
+            disabled = not availableRooms[room.id],
         }
     end
 
