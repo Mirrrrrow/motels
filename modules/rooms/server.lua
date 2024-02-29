@@ -1,5 +1,20 @@
 ---@type table<number, table<number, RawRoom>>
 local rawRoomData = {}
+
+local function syncRoomsToDB(stationId, rooms)
+    if not rawRoomData[stationId] then
+        rawRoomData[stationId] = {}
+    end
+
+    for _, roomData in pairs(rooms) do
+        local count = MySQL.scalar.await('SELECT COUNT(*) AS count FROM motel_rooms WHERE motel_id = ? AND room_id = ?', {stationId, roomData.id})
+        if count == 0 then
+            MySQL.insert.await('INSERT INTO motel_rooms (motel_id, room_id, occupant) VALUES (?, ?, ?)', {stationId, roomData.id, 'NaN'})
+        end
+        rawRoomData[stationId][roomData.id] = roomData
+    end
+end
+
 Citizen.CreateThreadNow(function ()
     local success, _ = pcall(MySQL.scalar.await, 'SELECT 1 FROM motel_rooms')
     if not success then
@@ -18,13 +33,7 @@ Citizen.CreateThreadNow(function ()
             rawRoomData[stationData.id] = {}
         end
 
-        for _, roomData in pairs(stationData.rooms) do
-            local count = MySQL.scalar.await('SELECT COUNT(*) AS count FROM motel_rooms WHERE motel_id = ? AND room_id = ?', {stationData.id, roomData.id})
-            if count == 0 then
-                MySQL.insert.await('INSERT INTO motel_rooms (motel_id, room_id, occupant) VALUES (?, ?, ?)', {stationData.id, roomData.id, 'NaN'})
-            end
-            rawRoomData[stationData.id][roomData.id] = roomData
-        end
+        syncRoomsToDB(stationData.id, stationData.rooms)
     end
 
     local results = MySQL.query.await('SELECT motel_id, room_id FROM motel_rooms')
