@@ -4,5 +4,7 @@
     "motel_rental_menu_room_title": "Room %s",
     "motel_rental_menu_room_title_note": "%s (%s)",
     "motel_rental_menu_room_description": "Price: %s$ per night",
-    "motel_stash_label": "Motel Stash for Room %s"
+    "motel_stash_label": "Motel Stash for Room %s",
+    "motel_rental_room_not_available": "This room can't be rented at the moment.",
+    "motel_rental_room_not_enough_money": "You don't have enough money to rent this room. (Needed: %s$)"
 }

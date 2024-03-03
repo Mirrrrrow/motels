@@ -53,4 +53,5 @@ end
 --- @field id number;
 --- @field price number;
 --- @field note string?;
+--- @field firstPrice number?;
 --- @field stash {coords: vector3, slots: number, maxWeight: number}?;

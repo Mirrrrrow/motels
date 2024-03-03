@@ -66,6 +66,28 @@ local function getAllAvailableRooms(motelId)
     return availableRooms
 end
 
+RegisterServerEvent('motels:server:rentRoom', function (motelId, roomId, price)
+    local rawRoom = rawRoomData[motelId][roomId]
+    if not rawRoom then return end
+    if not isRoomAvailable(motelId, roomId) then return end
+
+    if price ~= (rawRoom.price + (rawRoom.firstPrice or 0)) then return end
+
+    local playerId = source
+    local xPlayer = ESX.GetPlayerFromId(playerId)
+    if not xPlayer then return end
+
+    if xPlayer.getAccount('bank').money < price then
+        return lib.notify(playerId, {
+            description = locale('motel_rental_room_not_enough_money', price),
+            type = 'error'
+        })
+    end
+
+    xPlayer.removeAccountMoney('bank', price)
+    -- DB: Update room occupant and notify player
+end)
+
 lib.callback.register('motels:server:isRoomAvailable', function (_, motelId, roomId)
     if not roomId then
         return getAllAvailableRooms(motelId)
